@@ -1,4 +1,5 @@
 /* ==================== Global Styles ==================== */
+
 :root {
     --primary-color: #667eea;
     --secondary-color: #764ba2;
@@ -78,6 +79,7 @@ body {
 .nav-logo {
     font-size: 1.5rem;
     font-weight: 700;
+    font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     -webkit-background-clip: text;
     background-clip: text;
@@ -119,6 +121,7 @@ body {
     text-decoration: none;
     color: var(--text-dark);
     font-weight: 500;
+    font-family: 'Poppins', sans-serif;
     position: relative;
     transition: var(--transition);
 }
@@ -479,6 +482,47 @@ body {
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: 500;
+    margin-bottom: 18px;
+}
+
+.achievement-view-more {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.achievement-view-more:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(102, 126, 234, 0.2);
+}
+
+.achievements-actions {
+    margin-top: 35px;
+    text-align: center;
+}
+
+.view-more-btn {
+    display: inline-block;
+    padding: 14px 32px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.view-more-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(102, 126, 234, 0.2);
 }
 
 /* ==================== Certificates Section ==================== */
@@ -1170,3 +1214,4 @@ body.dark .achievement-image img {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     filter: brightness(0.9);
 }
+
