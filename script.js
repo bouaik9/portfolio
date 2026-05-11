@@ -288,3 +288,213 @@ function erase() {
 document.addEventListener("DOMContentLoaded", function () {
     if (textArray.length) setTimeout(type, newTextDelay + 250);
 });
+
+
+// ==================== Navbar Scroll Effect (Transparent Overlay) ====================
+document.addEventListener('DOMContentLoaded', function() {
+    const navbar = document.querySelector('.navbar');
+    const mobileToggle = document.querySelector('.mobile-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const backToTopBtn = document.getElementById('back-to-top');
+    
+    // --- Navbar transparency on scroll ---
+    function handleScroll() {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+        
+        // Back to top button visibility
+        if (backToTopBtn) {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+        }
+    }
+    
+    // Initial check
+    handleScroll();
+    
+    // Listen to scroll events
+    window.addEventListener('scroll', handleScroll);
+    
+    // --- Mobile Menu Toggle ---
+    if (mobileToggle && navMenu) {
+        mobileToggle.addEventListener('click', function() {
+            const expanded = mobileToggle.getAttribute('aria-expanded') === 'true' ? false : true;
+            navMenu.classList.toggle('active');
+            mobileToggle.setAttribute('aria-expanded', expanded);
+            // Optional: change toggle icon text
+            mobileToggle.textContent = navMenu.classList.contains('active') ? '✕' : '☰';
+        });
+        
+        // Close mobile menu when a nav link is clicked
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                navMenu.classList.remove('active');
+                if (mobileToggle) {
+                    mobileToggle.setAttribute('aria-expanded', 'false');
+                    mobileToggle.textContent = '☰';
+                }
+            });
+        });
+    }
+    
+    // --- Active link highlighting based on scroll position (optional enhancement) ---
+    const sections = document.querySelectorAll('section[id]');
+    
+    function setActiveLink() {
+        let currentSection = '';
+        const scrollPosition = window.scrollY + 120; // offset for navbar
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                currentSection = section.getAttribute('id');
+            }
+        });
+        
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            const href = link.getAttribute('href');
+            if (href && href.substring(1) === currentSection) {
+                link.classList.add('active');
+            }
+        });
+    }
+    
+    window.addEventListener('scroll', setActiveLink);
+    setActiveLink(); // initial call
+    
+    // --- Typed Text Effect (for hero section) ---
+    const typedTextElement = document.querySelector('.typed-text');
+    if (typedTextElement) {
+        const phrases = ['Ayoub Bouaik', 'a Developer', 'a DevOps Enthusiast', 'AI Engineer'];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let currentText = '';
+        
+        function typeEffect() {
+            const fullText = phrases[phraseIndex];
+            if (isDeleting) {
+                currentText = fullText.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                currentText = fullText.substring(0, charIndex + 1);
+                charIndex++;
+            }
+            
+            typedTextElement.textContent = currentText;
+            
+            if (!isDeleting && charIndex === fullText.length) {
+                isDeleting = true;
+                setTimeout(typeEffect, 2000);
+                return;
+            }
+            
+            if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                setTimeout(typeEffect, 500);
+                return;
+            }
+            
+            const speed = isDeleting ? 100 : 150;
+            setTimeout(typeEffect, speed);
+        }
+        
+        typeEffect();
+        
+        // Cursor blink class management
+        const cursor = document.querySelector('.cursor');
+        if (cursor) {
+            setInterval(() => {
+                cursor.classList.toggle('typing');
+            }, 500);
+        }
+    }
+    
+    // --- Contact Form Handling (basic validation and feedback) ---
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name')?.value.trim();
+            const email = document.getElementById('email')?.value.trim();
+            const message = document.getElementById('message')?.value.trim();
+            
+            // Remove existing feedback
+            const existingFeedback = document.querySelector('.form-feedback');
+            if (existingFeedback) existingFeedback.remove();
+            
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.className = 'form-feedback';
+            
+            if (!name || !email || !message) {
+                feedbackDiv.textContent = '❌ Please fill in all fields.';
+                feedbackDiv.style.color = '#ffdddd';
+                contactForm.appendChild(feedbackDiv);
+                return;
+            }
+            
+            if (!email.includes('@') || !email.includes('.')) {
+                feedbackDiv.textContent = '❌ Please enter a valid email address.';
+                feedbackDiv.style.color = '#ffdddd';
+                contactForm.appendChild(feedbackDiv);
+                return;
+            }
+            
+            // Simulate successful send (in real scenario, connect to backend)
+            feedbackDiv.textContent = '✅ Message sent successfully! I will get back to you soon.';
+            feedbackDiv.style.color = '#ccffcc';
+            contactForm.appendChild(feedbackDiv);
+            contactForm.reset();
+            
+            setTimeout(() => {
+                feedbackDiv.remove();
+            }, 5000);
+        });
+    }
+    
+    // --- Back to Top Button Logic ---
+    if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+    
+    // --- Ensure initial navbar state is transparent when page loads with hash ---
+    if (window.scrollY === 0) {
+        navbar.classList.remove('scrolled');
+    }
+    
+    // Fix for anchor links with navbar offset (already handled by CSS scroll-margin-top)
+    // Smooth scroll with offset for manual hash clicks
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                e.preventDefault();
+                const offsetTop = targetElement.offsetTop - 80; // navbar height + padding
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+                // Update URL without jumping
+                history.pushState(null, null, targetId);
+            }
+        });
+    });
+});

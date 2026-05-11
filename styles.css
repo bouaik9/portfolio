@@ -9,6 +9,7 @@
     --bg-dark: #0f0f1e;
     --border-color: #e0e0e0;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --navbar-height: 70px;
 }
 
 * {
@@ -23,11 +24,11 @@ html {
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1rem;
     color: var(--text-dark);
     background-color: #fff;
-    line-height: 1.6;
+    line-height: 1.5;
     overflow-x: hidden;
-    transition: background-color 0.3s, color 0.3s;
 }
 
 .container {
@@ -54,18 +55,40 @@ body {
     top: 0;
 }
 
-/* ==================== Navigation ==================== */
+/* ==================== Navigation (Transparent Overlay) ==================== */
+/* Replace the existing .navbar rule with this */
 .navbar {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
     z-index: 100;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s;
+    transition: var(--transition);
+    background: transparent;
+    box-shadow: none;
+    border-bottom: none;
 }
 
+.navbar.scrolled {
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    /* backdrop-filter removed */
+}
+.navbar,
+.nav-container,
+.navbar::before,
+.navbar::after {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent;
+}
+
+.navbar.scrolled,
+.navbar.scrolled .nav-container {
+    border: none !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* keep shadow if desired, but no line */
+    background: rgba(255, 255, 255, 0.98);
+}
 .nav-container {
     display: flex;
     justify-content: space-between;
@@ -73,12 +96,23 @@ body {
     padding: 1rem 2rem;
     max-width: 1200px;
     margin: 0 auto;
+    height: var(--navbar-height);
 }
 
+/* Logo - transparent state: white text with subtle gradient */
 .nav-logo {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 700;
     font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ffffff, #e0e0ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: var(--transition);
+}
+
+/* Scrolled logo - original gradient */
+.navbar.scrolled .nav-logo {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     -webkit-background-clip: text;
     background-clip: text;
@@ -97,32 +131,32 @@ body {
     border: none;
     font-size: 1.8rem;
     cursor: pointer;
-    color: var(--text-dark);
     transition: var(--transition);
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
-.theme-toggle {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.5rem;
-    padding: 0.5rem;
-    border-radius: 50%;
-    transition: var(--transition);
+/* Scrolled toggle color */
+.navbar.scrolled .mobile-toggle {
     color: var(--text-dark);
-}
-
-.theme-toggle:hover {
-    background: rgba(0, 0, 0, 0.1);
+    text-shadow: none;
 }
 
 .nav-link {
     text-decoration: none;
-    color: var(--text-dark);
     font-weight: 500;
     font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
     position: relative;
     transition: var(--transition);
+    color: white;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+}
+
+/* Scrolled nav links - dark */
+.navbar.scrolled .nav-link {
+    color: var(--text-dark);
+    text-shadow: none;
 }
 
 .nav-link::after {
@@ -132,8 +166,12 @@ body {
     left: 0;
     width: 0;
     height: 2px;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background: white;
     transition: width 0.3s ease;
+}
+
+.navbar.scrolled .nav-link::after {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
 }
 
 .nav-link:hover::after,
@@ -142,17 +180,36 @@ body {
 }
 
 .nav-link.active {
+    font-weight: 600;
+}
+
+.navbar.scrolled .nav-link.active {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
+/* Theme toggle button (preserve but keep minimal) */
+.theme-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+    color: white;
+    transition: var(--transition);
+}
+
+.navbar.scrolled .theme-toggle {
+    color: var(--text-dark);
+}
+
 /* ==================== Hero Section ==================== */
 .hero {
     position: relative;
     width: 100%;
-    margin-top: 60px;
+    margin-top: 0;          /* Remove margin-top to allow navbar overlay */
 }
 
 .hero-image {
@@ -166,7 +223,7 @@ body {
 .hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4));
     z-index: 1;
 }
 
@@ -181,9 +238,8 @@ body {
     text-align: center;
     color: white;
     padding: 1rem;
+    padding-top: var(--navbar-height);   /* Push content below navbar */
     animation: fadeInUp 1s ease-out 0.3s both;
-
-
 }
 
 @keyframes fadeInUp {
@@ -191,7 +247,6 @@ body {
         opacity: 0;
         transform: translateY(30px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
@@ -199,16 +254,14 @@ body {
 }
 
 .hero-title {
-    font-size: 3.5rem;
+    font-size: 2.8rem;
     font-weight: 800;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
 }
 
 .typed-text {
     color: white;
-    /* You can change this to var(--primary-color) if needed */
 }
 
 .cursor {
@@ -224,32 +277,26 @@ body {
 }
 
 @keyframes blink {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0;
-    }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
 }
 
 .hero-subtitle {
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
     font-weight: 300;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
 }
 
 .cta-button {
     display: inline-block;
-    padding: 15px 40px;
+    padding: 12px 32px;
     background: white;
     color: var(--primary-color);
     text-decoration: none;
     border-radius: 50px;
     font-weight: 600;
+    font-size: 0.95rem;
     transition: var(--transition);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     border: 2px solid white;
@@ -297,34 +344,44 @@ body {
         opacity: 1;
         transform: translateX(-50%) translateY(0);
     }
-
     100% {
         opacity: 0;
         transform: translateX(-50%) translateY(15px);
     }
 }
 
+/* ==================== Anchor Offset (fix jumping behind fixed navbar) ==================== */
+section[id],
+.about,
+.skills,
+.projects,
+.achievements-section,
+.certificates-section,
+.contact {
+    scroll-margin-top: 80px;
+}
+
 /* ==================== About Section ==================== */
 .about {
-    padding: 100px 0;
+    padding: 80px 0;
     background: var(--bg-light);
 }
 
 .section-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: 40px;
     position: relative;
 }
 
 .section-title::after {
     content: '';
     position: absolute;
-    bottom: -15px;
+    bottom: -12px;
     left: 50%;
     transform: translateX(-50%);
-    width: 80px;
-    height: 4px;
+    width: 70px;
+    height: 3px;
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     border-radius: 2px;
 }
@@ -332,7 +389,7 @@ body {
 .about-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 60px;
+    gap: 50px;
     align-items: center;
 }
 
@@ -342,12 +399,12 @@ body {
 }
 
 .profile-image {
-    width: 300px;
-    height: 300px;
+    width: 260px;
+    height: 260px;
     border-radius: 50%;
     object-fit: cover;
-    box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
-    border: 5px solid var(--primary-color);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    border: 4px solid var(--primary-color);
     transition: var(--transition);
 }
 
@@ -356,15 +413,15 @@ body {
 }
 
 .about-text p {
-    font-size: 1.1rem;
-    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
     color: #555;
-    line-height: 1.8;
+    line-height: 1.6;
 }
 
-/* ==================== Skills Section ==================== */
+/* ==================== Skills, Projects, etc (unchanged) ==================== */
 .skills {
-    padding: 100px 0;
+    padding: 80px 0;
     background: #f5f8ff;
 }
 
@@ -372,13 +429,13 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 30px;
+    gap: 25px;
 }
 
 .skill-card {
-    flex: 0 1 260px;
+    flex: 0 1 240px;
     background: white;
-    padding: 35px 30px;
+    padding: 25px 20px;
     border-radius: 20px;
     text-align: center;
     box-shadow: 0 18px 45px rgba(50, 78, 147, 0.08);
@@ -387,33 +444,32 @@ body {
 }
 
 .skill-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 22px 55px rgba(50, 78, 147, 0.12);
-    border-color: rgba(102, 126, 234, 0.25);
+    transform: translateY(-5px);
 }
 
 .skill-card h3 {
-    margin-bottom: 18px;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
     color: var(--primary-color);
 }
 
 .skill-card p {
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #6d7385;
 }
 
 .skill-mastery {
-    margin-top: 15px;
+    margin-top: 12px;
     text-align: left;
 }
 
 .skill-mastery-bar {
     width: 100%;
-    height: 8px;
+    height: 6px;
     background: #e0e6ed;
     border-radius: 4px;
     overflow: hidden;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .skill-mastery-progress {
@@ -424,26 +480,25 @@ body {
 }
 
 .skill-mastery-text {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: var(--primary-color);
     font-weight: 600;
 }
 
-/* ==================== Achievements Section ==================== */
 .achievements-section {
-    padding: 100px 0;
+    padding: 80px 0;
     background: white;
 }
 
 .achievements-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
 }
 
 .achievement-card {
     background: #f4f7ff;
-    padding: 32px 28px;
+    padding: 25px 20px;
     border-radius: 20px;
     text-align: center;
     border: 1px solid rgba(102, 126, 234, 0.12);
@@ -452,52 +507,67 @@ body {
 }
 
 .achievement-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 22px 50px rgba(50, 78, 147, 0.12);
+    transform: translateY(-5px);
 }
 
-.achievement-icon {
-    font-size: 2.5rem;
-    margin-bottom: 15px;
+.achievement-image {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.achievement-image img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.25);
+    transition: transform 0.3s ease;
+}
+
+.achievement-card:hover .achievement-image img {
+    transform: scale(1.02);
 }
 
 .achievement-card h3 {
-    font-size: 1.3rem;
-    margin-bottom: 15px;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
     color: var(--primary-color);
 }
 
 .achievement-card p {
+    font-size: 0.9rem;
     color: #5f6775;
-    line-height: 1.6;
-    margin-bottom: 15px;
+    line-height: 1.5;
+    margin-bottom: 12px;
 }
 
 .achievement-year {
     display: inline-block;
     background: var(--primary-color);
     color: white;
-    padding: 5px 12px;
+    padding: 4px 10px;
     border-radius: 20px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 500;
 }
 
-/* ==================== Certificates Section ==================== */
 .certificates-section {
-    padding: 100px 0;
+    padding: 80px 0;
     background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%);
 }
 
 .certificates-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
 }
 
 .certificate-card {
     background: white;
-    padding: 30px;
+    padding: 25px;
     border-radius: 20px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
     transition: var(--transition);
@@ -505,32 +575,31 @@ body {
 }
 
 .certificate-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 25px 45px rgba(102, 126, 234, 0.15);
-    border-color: rgba(102, 126, 234, 0.3);
+    transform: translateY(-6px);
 }
 
 .certificate-icon {
-    font-size: 2.8rem;
-    margin-bottom: 15px;
+    font-size: 2.2rem;
+    margin-bottom: 12px;
 }
 
 .certificate-card h3 {
-    font-size: 1.25rem;
-    margin-bottom: 10px;
+    font-size: 1.15rem;
+    margin-bottom: 8px;
     color: var(--text-dark);
 }
 
 .cert-issuer {
     color: var(--primary-color);
     font-weight: 600;
-    margin-bottom: 8px;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
 }
 
 .cert-date {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: #7a7f8e;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .cert-link {
@@ -538,7 +607,7 @@ body {
     color: var(--primary-color);
     text-decoration: none;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     transition: var(--transition);
 }
 
@@ -547,16 +616,15 @@ body {
     color: var(--secondary-color);
 }
 
-/* ==================== Projects Section ==================== */
 .projects {
-    padding: 100px 0;
+    padding: 80px 0;
     background: white;
 }
 
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 40px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
 }
 
 .project-card {
@@ -568,36 +636,18 @@ body {
     animation: scaleIn 0.6s ease-out backwards;
 }
 
-.project-card:nth-child(1) {
-    animation-delay: 0.1s;
-}
-
-.project-card:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.project-card:nth-child(3) {
-    animation-delay: 0.3s;
-}
-
-.project-card:nth-child(4) {
-    animation-delay: 0.4s;
-}
-
-.project-card:nth-child(5) {
-    animation-delay: 0.5s;
-}
-
-.project-card:nth-child(6) {
-    animation-delay: 0.6s;
-}
+.project-card:nth-child(1) { animation-delay: 0.1s; }
+.project-card:nth-child(2) { animation-delay: 0.2s; }
+.project-card:nth-child(3) { animation-delay: 0.3s; }
+.project-card:nth-child(4) { animation-delay: 0.4s; }
+.project-card:nth-child(5) { animation-delay: 0.5s; }
+.project-card:nth-child(6) { animation-delay: 0.6s; }
 
 @keyframes scaleIn {
     from {
         opacity: 0;
         transform: scale(0.95);
     }
-
     to {
         opacity: 1;
         transform: scale(1);
@@ -605,13 +655,13 @@ body {
 }
 
 .project-card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-8px);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
 }
 
 .project-image {
     width: 100%;
-    height: 250px;
+    height: 220px;
     background-size: cover;
     background-position: center;
     transition: transform 0.4s ease;
@@ -622,12 +672,12 @@ body {
 }
 
 .project-content {
-    padding: 30px;
+    padding: 25px;
 }
 
 .project-title {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
 }
 
 .project-card:hover .project-title {
@@ -635,23 +685,25 @@ body {
 }
 
 .project-description {
+    font-size: 0.9rem;
     color: #666;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    line-height: 1.5;
 }
 
 .project-tech {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 8px;
+    margin-bottom: 15px;
     flex-wrap: wrap;
 }
 
 .project-tech span {
     background: var(--bg-light);
     color: var(--primary-color);
-    padding: 5px 12px;
+    padding: 4px 10px;
     border-radius: 20px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 500;
     transition: var(--transition);
 }
@@ -666,6 +718,7 @@ body {
     color: var(--primary-color);
     text-decoration: none;
     font-weight: 600;
+    font-size: 0.85rem;
     position: relative;
 }
 
@@ -684,9 +737,8 @@ body {
     width: 100%;
 }
 
-/* ==================== Contact Section ==================== */
 .contact {
-    padding: 100px 0;
+    padding: 80px 0;
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     color: white;
 }
@@ -696,27 +748,27 @@ body {
 }
 
 .contact-subtitle {
-    font-size: 1.2rem;
-    margin-bottom: 40px;
+    font-size: 1rem;
+    margin-bottom: 30px;
     opacity: 0.9;
 }
 
 .contact-form {
-    max-width: 600px;
-    margin: 0 auto 50px;
+    max-width: 550px;
+    margin: 0 auto 40px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
 }
 
 .form-group input,
 .form-group textarea {
     width: 100%;
-    padding: 12px 20px;
+    padding: 10px 18px;
     border: none;
     border-radius: 30px;
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 0.9rem;
     background: rgba(255, 255, 255, 0.9);
     transition: var(--transition);
 }
@@ -732,12 +784,12 @@ body {
     background: white;
     color: var(--primary-color);
     border: none;
-    padding: 12px 30px;
+    padding: 10px 28px;
     border-radius: 50px;
     font-weight: bold;
     cursor: pointer;
     transition: var(--transition);
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
 .submit-btn:hover {
@@ -747,15 +799,15 @@ body {
 }
 
 .form-feedback {
-    margin-top: 10px;
-    font-size: 0.9rem;
+    margin-top: 8px;
+    font-size: 0.85rem;
 }
 
 .contact-links {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 30px;
-    max-width: 800px;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 25px;
+    max-width: 750px;
     margin: 0 auto;
 }
 
@@ -763,12 +815,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    padding: 20px;
+    gap: 8px;
+    padding: 15px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     color: white;
     text-decoration: none;
+    font-size: 0.9rem;
     transition: var(--transition);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -776,34 +829,33 @@ body {
 
 .contact-link:hover {
     background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-5px);
+    transform: translateY(-3px);
 }
 
 .contact-icon {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
 }
 
-/* ==================== Footer ==================== */
 .footer {
     background: var(--text-dark);
     color: white;
     text-align: center;
-    padding: 30px 0;
+    padding: 25px 0;
+    font-size: 0.85rem;
 }
 
-/* ==================== Back to Top Button ==================== */
 .back-to-top {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    width: 50px;
-    height: 50px;
+    width: 44px;
+    height: 44px;
     background: var(--primary-color);
     color: white;
     border: none;
     border-radius: 50%;
     cursor: pointer;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -824,145 +876,11 @@ body {
     transform: translateY(-3px);
 }
 
-/* ==================== Dark Mode ==================== */
-body.dark {
-    background-color: var(--bg-dark);
-    color: var(--text-light);
-}
-
-body.dark .navbar {
-    background: rgba(15, 15, 30, 0.95);
-}
-
-body.dark .nav-link {
-    color: var(--text-light);
-}
-
-body.dark .theme-toggle {
-    color: var(--text-light);
-}
-
-body.dark .theme-toggle:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-body.dark .hero-image {
-    filter: brightness(0.6) contrast(1.1);
-}
-
-body.dark .hero-overlay {
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4));
-}
-
-body.dark .about {
-    background: var(--bg-dark);
-}
-
-body.dark .skills {
-    background: #11111f;
-}
-
-body.dark .projects {
-    background: #1a1a2e;
-}
-
-body.dark .project-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-body.dark .project-title {
-    color: var(--text-light);
-}
-
-body.dark .project-description {
-    color: #d3d8e0;
-}
-
-body.dark .project-tech span {
-    background: rgba(255, 255, 255, 0.08);
-    color: var(--primary-color);
-}
-
-body.dark .skill-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.08);
-}
-
-body.dark .skill-card p {
-    color: #c4c8d7;
-}
-
-body.dark .skill-mastery-bar {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-body.dark .about-text p {
-    color: #d1d6e0;
-}
-
-body.dark .profile-image {
-    border-color: var(--secondary-color);
-}
-
-body.dark .contact-link {
-    background: rgba(255, 255, 255, 0.08);
-}
-
-body.dark .footer {
-    background: #1a1a2e;
-}
-
-body.dark .mobile-toggle {
-    color: var(--text-light);
-}
-
-/* Dark mode for new sections */
-body.dark .achievements-section {
-    background: #13132b;
-}
-
-body.dark .achievement-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.08);
-}
-
-body.dark .achievement-card p {
-    color: #c1c6d4;
-}
-
-body.dark .achievement-card h3 {
-    color: var(--primary-color);
-}
-
-body.dark .certificates-section {
-    background: #0f0f24;
-}
-
-body.dark .certificate-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.08);
-}
-
-body.dark .certificate-card h3 {
-    color: var(--text-light);
-}
-
-body.dark .cert-date {
-    color: #a0a5b5;
-}
-
-/* ==================== Responsive ==================== */
+/* ==================== Mobile Navigation Overlay Enhancements ==================== */
 @media (max-width: 768px) {
     .mobile-toggle {
         display: block;
         order: 3;
-    }
-
-    .theme-toggle {
-        order: 2;
-        margin-left: auto;
-        margin-right: 1rem;
     }
 
     .nav-logo {
@@ -971,12 +889,12 @@ body.dark .cert-date {
 
     .nav-menu {
         position: fixed;
-        top: 70px;
+        top: 0px;
         left: -100%;
         flex-direction: column;
         background: white;
         width: 80%;
-        height: 100vh;
+        height: calc(100vh - var(--navbar-height));
         padding: 2rem;
         transition: left 0.3s ease;
         gap: 1.5rem;
@@ -988,8 +906,18 @@ body.dark .cert-date {
         left: 0;
     }
 
-    body.dark .nav-menu {
-        background: #1a1a2e;
+    /* Mobile menu links always dark (solid background) */
+    .nav-menu .nav-link {
+        color: var(--text-dark) !important;
+        text-shadow: none;
+    }
+
+    .navbar.scrolled .nav-menu .nav-link {
+        color: var(--text-dark) !important;
+    }
+
+    .nav-menu .nav-link::after {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     }
 
     .hero-title {
@@ -1000,22 +928,34 @@ body.dark .cert-date {
         font-size: 1rem;
     }
 
+    .hero-content {
+        padding-top: calc(var(--navbar-height) + 10px);
+    }
+
     .about-content {
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 30px;
     }
 
     .profile-image {
-        width: 220px;
-        height: 220px;
+        width: 200px;
+        height: 200px;
     }
 
     .section-title {
-        font-size: 2rem;
+        font-size: 1.75rem;
     }
 
     .projects-grid {
         grid-template-columns: 1fr;
+    }
+
+    .project-image {
+        border-radius: 16px;
+        width: 100%;
+        height: 280px;
+        background-size: cover;
+        background-position: center;
     }
 
     .contact-links {
@@ -1029,28 +969,49 @@ body.dark .cert-date {
     .achievements-grid {
         grid-template-columns: 1fr;
     }
+
+    .cta-button {
+        padding: 8px 22px;
+        font-size: 0.85rem;
+    }
+
+    .achievement-image img {
+        height: 200px;
+    }
+
+    .about-text p {
+        font-size: 0.95rem;
+    }
 }
 
 @media (max-width: 480px) {
     .hero-title {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
     }
 
     .hero-subtitle {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
 
     .cta-button {
-        padding: 10px 25px;
+        padding: 6px 18px;
+        font-size: 0.8rem;
     }
 
     .section-title {
-        font-size: 1.75rem;
+        font-size: 1.5rem;
+    }
+
+    .project-title {
+        font-size: 1.2rem;
+    }
+
+    .project-description {
+        font-size: 0.85rem;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-
     *,
     *::before,
     *::after {
@@ -1058,117 +1019,4 @@ body.dark .cert-date {
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
     }
-}
-
-/* ==================== Achievements Section with Images ==================== */
-.achievements-section {
-    padding: 100px 0;
-    background: white;
-}
-
-.achievements-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-}
-
-.achievement-card {
-    background: #f4f7ff;
-    padding: 32px 28px;
-    border-radius: 20px;
-    text-align: center;
-    border: 1px solid rgba(102, 126, 234, 0.12);
-    box-shadow: 0 18px 40px rgba(50, 78, 147, 0.06);
-    transition: var(--transition);
-}
-
-.achievement-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 22px 50px rgba(50, 78, 147, 0.12);
-}
-
-.achievement-image {
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-}
-
-.achievement-image img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.25);
-    transition: transform 0.3s ease;
-}
-
-.achievement-card:hover .achievement-image img {
-    transform: scale(1.03);
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-    .achievement-image img {
-        width: 100%;
-        height: 230px;
-        object-fit: cover;
-        border-radius: 12px;
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.25);
-        transition: transform 0.3s ease;
-    }
-
-    .achievement-image {
-        margin-bottom: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-    }
-}
-
-.achievement-card h3 {
-    font-size: 1.3rem;
-    margin-bottom: 15px;
-    color: var(--primary-color);
-}
-
-.achievement-card p {
-    color: #5f6775;
-    line-height: 1.6;
-    margin-bottom: 15px;
-}
-
-.achievement-year {
-    display: inline-block;
-    background: var(--primary-color);
-    color: white;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-
-/* Dark mode support for achievement images */
-body.dark .achievements-section {
-    background: #13132b;
-}
-
-body.dark .achievement-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.08);
-}
-
-body.dark .achievement-card p {
-    color: #c1c6d4;
-}
-
-body.dark .achievement-card h3 {
-    color: var(--primary-color);
-}
-
-body.dark .achievement-image img {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-    filter: brightness(0.9);
 }
