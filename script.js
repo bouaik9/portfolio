@@ -371,54 +371,6 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('scroll', setActiveLink);
     setActiveLink(); // initial call
     
-    // --- Typed Text Effect (for hero section) ---
-    const typedTextElement = document.querySelector('.typed-text');
-    if (typedTextElement) {
-        const phrases = ['Ayoub Bouaik', 'a Developer', 'a DevOps Enthusiast', 'AI Engineer'];
-        let phraseIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        let currentText = '';
-        
-        function typeEffect() {
-            const fullText = phrases[phraseIndex];
-            if (isDeleting) {
-                currentText = fullText.substring(0, charIndex - 1);
-                charIndex--;
-            } else {
-                currentText = fullText.substring(0, charIndex + 1);
-                charIndex++;
-            }
-            
-            typedTextElement.textContent = currentText;
-            
-            if (!isDeleting && charIndex === fullText.length) {
-                isDeleting = true;
-                setTimeout(typeEffect, 2000);
-                return;
-            }
-            
-            if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                phraseIndex = (phraseIndex + 1) % phrases.length;
-                setTimeout(typeEffect, 500);
-                return;
-            }
-            
-            const speed = isDeleting ? 100 : 150;
-            setTimeout(typeEffect, speed);
-        }
-        
-        typeEffect();
-        
-        // Cursor blink class management
-        const cursor = document.querySelector('.cursor');
-        if (cursor) {
-            setInterval(() => {
-                cursor.classList.toggle('typing');
-            }, 500);
-        }
-    }
     
     // --- Contact Form Handling (basic validation and feedback) ---
     const contactForm = document.getElementById('contact-form');
