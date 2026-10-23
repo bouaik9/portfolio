@@ -1,5 +1,5 @@
 export const aboutData = {
-  avatar: "/assets/ayoub-bouaik.png",
+  avatar: "/images/ayoub-bouaik.png",
 };
 export const profile = {
   name: "Ayoub Bouaik",
@@ -9,7 +9,7 @@ export const profile = {
   location: "Morocco",
   linkedin: "https://www.linkedin.com/in/ayoub-bouaik-3724b121b/",
   github: "https://github.com/bouaik9",
-  resumeUrl: "/assets/Ayoub-Bouaik-Resume.pdf",
+  resumeUrl: "/images/Ayoub-Bouaik-Resume.pdf",
   about: [
     "I'm a Software Engineering & Artificial Intelligence student at FST Errachidia.",
     "Python is my primary language, with hands-on experience building backend applications, automating workflows, and working with data.",
@@ -109,12 +109,12 @@ export const projects = [
 ];
 
 export const achievements = [
-  { title: "Huawei ICT Competition — Global Stage, China", img: "/assets/china.jpeg", detail: "3rd prize. Represented Morocco on the global stage in DevOps and cloud technologies.", year: "2025" },
-  { title: "Mobile Health Digi-Hackathon", img: "/assets/hackathon.jpeg", detail: "2nd place — shipped an innovative healthcare mobile application under time pressure.", year: "2025" },
-  { title: "Moroccan National Programming Contest — UM6P", img: "/assets/1709226557964.jpeg", detail: "11th of 60 teams solving complex algorithmic challenges under time pressure.", year: "2024" },
-  { title: "Hassania IT Problem Solving — EHTP Casablanca", img: "/assets/cp.jpeg", detail: "9th of 25 teams in a contest focused on algorithms and efficient problem-solving.", year: "2024" },
-  { title: "Game of Codes IV — INSEA", img: "/assets/1770942723131.jpeg", detail: "4-hour competitive programming challenge on problem-solving and teamwork.", year: "2025" },
-  { title: "AMPC3 Problem Solving — ENSAM Meknes", img: "/assets/1710186883323.jpeg", detail: "Algorithmic challenges emphasizing logic, speed and coding efficiency.", year: "2024" },
+  { title: "Huawei ICT Competition — Global Stage, China", img: "/images/china.jpeg", detail: "3rd prize. Represented Morocco on the global stage in DevOps and cloud technologies.", year: "2025" },
+  { title: "Mobile Health Digi-Hackathon", img: "/images/hackathon.jpeg", detail: "2nd place — shipped an innovative healthcare mobile application under time pressure.", year: "2025" },
+  { title: "Moroccan National Programming Contest — UM6P", img: "/images/1709226557964.jpeg", detail: "11th of 60 teams solving complex algorithmic challenges under time pressure.", year: "2024" },
+  { title: "Hassania IT Problem Solving — EHTP Casablanca", img: "/images/cp.jpeg", detail: "9th of 25 teams in a contest focused on algorithms and efficient problem-solving.", year: "2024" },
+  { title: "Game of Codes IV — INSEA", img: "/images/1770942723131.jpeg", detail: "4-hour competitive programming challenge on problem-solving and teamwork.", year: "2025" },
+  { title: "AMPC3 Problem Solving — ENSAM Meknes", img: "/images/1710186883323.jpeg", detail: "Algorithmic challenges emphasizing logic, speed and coding efficiency.", year: "2024" },
 ];
 
 export const certificates = [
