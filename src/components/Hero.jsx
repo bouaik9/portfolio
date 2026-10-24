@@ -56,7 +56,7 @@ export default function Hero() {
         </motion.p>
         <motion.p className="hero__tagline" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 }}>
           Backend developer &amp; data engineer. Django core contributor, Oracle-certified DevOps professional,
-          competitive programmer — I build systems that scale.
+          competitive programmer, I build systems that scale.
         </motion.p>
 
         <motion.div className="hero__cta" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}>
