@@ -1,5 +1,5 @@
 import Reveal, { SectionHeading } from "./Reveal";
-import { education, leadership } from "../data";
+import { education } from "../data";
 
 export default function Education() {
   return (
@@ -19,14 +19,7 @@ export default function Education() {
             </Reveal>
           ))}
         </div>
-        <Reveal delay={0.15} className="glass edu-lead">
-          <span className="edu-lead__icon" aria-hidden="true">🧭</span>
-          <div>
-            <h3>{leadership.role}</h3>
-            <p className="edu-card__school">{leadership.org} · <span className="edu-card__period">{leadership.period}</span></p>
-            <p className="edu-card__note">{leadership.detail}</p>
-          </div>
-        </Reveal>
+     
       </div>
     </section>
   );

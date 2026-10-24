@@ -6,7 +6,7 @@ export default function Skills() {
   return (
     <section id="skills" className="section">
       <div className="container">
-        <SectionHeading kicker="04 · toolbox" title="Technical Skills" />
+        <SectionHeading kicker="05 · toolbox" title="Technical Skills" />
         <div className="skills__grid">
           {skills.map((group, gi) => (
             <Reveal key={group.category} delay={gi * 0.06} className="glass skill-card">

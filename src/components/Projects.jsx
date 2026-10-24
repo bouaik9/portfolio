@@ -6,7 +6,7 @@ export default function Projects() {
   return (
     <section id="projects" className="section section--alt">
       <div className="container">
-        <SectionHeading kicker="05 · shipped" title="Featured Projects" />
+        <SectionHeading kicker="04 · shipped" title="Featured Projects" />
         <div className="projects__grid">
           {projects.map((p, i) => (
             <Reveal key={p.title} delay={(i % 3) * 0.08} className="project-card glass">

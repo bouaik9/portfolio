@@ -43,7 +43,7 @@ export default function App() {
         <About />
 	
         <Experience />
-        
+        <Education/>
         <Projects />
         <Skills />
         <Achievements />
